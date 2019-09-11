@@ -2,14 +2,14 @@ import React from 'react';
 
 import SignIn from './components/login.component';
 
-import FirebaseAuthProvider from './contexts/firebase/auth.provider';
+import FirebaseProvider from './contexts/firebase/firebase.provider';
 
 function App() {
   return (
     <div className='App'>
-      <FirebaseAuthProvider>
+      <FirebaseProvider>
         <SignIn />
-      </FirebaseAuthProvider>
+      </FirebaseProvider>
     </div>
   );
 }

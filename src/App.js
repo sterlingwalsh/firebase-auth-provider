@@ -7,7 +7,7 @@ import FirebaseProvider from './contexts/firebase/firebase.provider';
 function App() {
   return (
     <div className='App'>
-      <FirebaseProvider>
+      <FirebaseProvider firestore auth>
         <SignIn />
       </FirebaseProvider>
     </div>

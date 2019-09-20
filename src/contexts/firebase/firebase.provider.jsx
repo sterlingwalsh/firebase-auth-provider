@@ -1,8 +1,11 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React from 'react';
 
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
 import * as firebase from 'firebase/app';
+
+import { AuthProvider } from './auth.provider';
+import { FirestoreProvider } from './firestore.provider';
 
 // TODO: Replace the following with your app's Firebase project configuration
 var firebaseConfig = {
@@ -15,41 +18,15 @@ var firebaseConfig = {
   appId: '1:221653759720:web:82d2c02ce80e04b9'
 };
 // var num = process.env.REACT_APP_NUM;
+firebase.initializeApp(firebaseConfig);
 
-export const FirebaseContext = createContext({});
-
-const FirebaseProvider = ({ children, firestore, auth, ...otherProps }) => {
+const FirebaseProvider = ({ children, ...otherProps }) => {
   console.log('render firebase');
-  const [FunctionProvider, setFunctionProvider] = useState();
-  useEffect(() => {
-    let fullProvider = children;
-    const importPromises = [];
-    if (auth) {
-      importPromises.push(
-        import('./auth.provider').then(authProvider => {
-          fullProvider = addProvider(fullProvider, authProvider.default);
-        })
-      );
-    }
-
-    // if (firestore){
-    //   import('firebase/firestore').then(firestoreProvider =>
-    //     addProvider(fullProvider, firestoreProvider)
-    //   );}
-    Promise.all(importPromises).then(() => {
-      firebase.initializeApp(firebaseConfig);
-      setFunctionProvider(fullProvider);
-    });
-  }, [children, auth, firestore]);
   return (
-    <FirebaseContext.Provider value={{ firebase }}>
-      {FunctionProvider ? FunctionProvider : children}
-    </FirebaseContext.Provider>
+    <AuthProvider firebase={firebase}>
+      <FirestoreProvider firebase={firebase}>{children}</FirestoreProvider>
+    </AuthProvider>
   );
 };
-
-const addProvider = (children, Provider) => (
-  <Provider firebase={firebase}>{children}</Provider>
-);
 
 export default FirebaseProvider;

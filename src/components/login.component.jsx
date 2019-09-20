@@ -6,7 +6,15 @@ import React, {
   useRef
 } from 'react';
 
-import { AuthContext } from '../contexts/firebase/auth.provider';
+import { useAuth } from '../contexts/firebase/auth.provider';
+
+import {
+  ButtonContainer,
+  Button,
+  MainContainer,
+  Form,
+  Input
+} from './login.styles';
 
 const SignIn = () => {
   const {
@@ -14,7 +22,7 @@ const SignIn = () => {
     signInWithEmailAndPassword,
     setOnAuthStateChanged,
     signOut
-  } = useContext(AuthContext);
+  } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -64,29 +72,30 @@ const SignIn = () => {
   ];
 
   return (
-    <div>
-      <input
-        type='email'
-        placeholder='Email'
-        onChange={evt => setEmail(evt.target.value)}
-      ></input>
-      <input
-        type='password'
-        placeholder='Password'
-        onChange={evt => setPassword(evt.target.value)}
-      ></input>
-      {loginMethods.map(({ name, signIn, signUp }, index) => (
-        <div key={index}>
-          <span>
-            <button onClick={signIn}>{`Sign In with ${name}`}</button>
-          </span>
-          <span>
-            <button onClick={signUp}>{`Sign Up with ${name}`}</button>
-          </span>
-        </div>
-      ))}
-      <button onClick={signOut}>{`Sign Out`}</button>
-    </div>
+    <MainContainer>
+      <Form>
+        <Input
+          type='email'
+          placeholder='Email'
+          onChange={evt => setEmail(evt.target.value)}
+        ></Input>
+        <Input
+          type='password'
+          placeholder='Password'
+          onChange={evt => setPassword(evt.target.value)}
+        ></Input>
+      </Form>
+      <ButtonContainer>
+        {loginMethods.map(({ name, signIn, signUp }, index) => (
+          <React.Fragment key={index}>
+            <Button onClick={signIn}>{`Sign In with ${name}`}</Button>
+
+            <Button onClick={signUp}>{`Sign Up with ${name}`}</Button>
+          </React.Fragment>
+        ))}
+      </ButtonContainer>
+      <Button onClick={signOut}>{`Sign Out`}</Button>
+    </MainContainer>
   );
 };
 
